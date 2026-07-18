@@ -69,6 +69,53 @@ const NAV_ITEMS = [
   { id: 'contact',   key: 'nav.contact' },
 ]
 
+const LANG_FLAGS = {
+  EN: '🇬🇧', FR: '🇫🇷', AR: '🇸🇦', AM: '🇪🇹', OM: '🇪🇹', TL: '🇵🇭',
+}
+
+// ── Custom Language Dropdown ──
+function LangPicker({ lang, onChange }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const fn = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', fn)
+    return () => document.removeEventListener('mousedown', fn)
+  }, [])
+
+  return (
+    <div className="lang-picker" ref={ref}>
+      <button className="lang-trigger" onClick={() => setOpen(v => !v)} aria-haspopup="listbox" aria-expanded={open}>
+        <span className="lang-trigger-globe">🌐</span>
+        <span className="lang-trigger-code">{lang}</span>
+        <span className={`lang-trigger-chev${open ? ' open' : ''}`}>▾</span>
+      </button>
+      {open && (
+        <div className="lang-menu" role="listbox">
+          {AVAILABLE_LANGS.map(code => {
+            const l = LANGS[code]
+            return (
+              <button
+                key={code}
+                role="option"
+                aria-selected={lang === code}
+                className={`lang-opt${lang === code ? ' active' : ''}`}
+                onClick={() => { onChange(code); setOpen(false) }}
+              >
+                <span className="lang-opt-flag">{LANG_FLAGS[code]}</span>
+                <span className="lang-opt-name">{l.name}</span>
+                <span className="lang-opt-code">{l.label}</span>
+                {lang === code && <span className="lang-opt-check">✓</span>}
+              </button>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Video Modal ──
 function VideoModal({ video, lang, onClose }) {
   useEffect(() => {
@@ -129,10 +176,8 @@ function CatRow({ cat, onPlay, lang, open, onToggle }) {
   const bodyRef = useRef(null)
   const rowRef = useRef(null)
 
-  // Scroll the opened category into view when it expands
   useEffect(() => {
     if (open && rowRef.current) {
-      // Small delay to let the DOM finish rendering
       requestAnimationFrame(() => {
         rowRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       })
@@ -241,11 +286,8 @@ function HomePage({ navigate, onPlay, lang }) {
 // ── Tutorials Page ──
 function TutorialsPage({ onPlay, openCatId, lang }) {
   const [q, setQ] = useState('')
-  // openCat tracks which category is expanded.
-  // Initialize: if openCatId is provided (navigated from home card), use it; otherwise first cat.
   const [openCat, setOpenCat] = useState(openCatId || CATS[0]?.id || null)
 
-  // When openCatId changes (clicking a different category from home), update immediately
   useEffect(() => {
     if (openCatId) setOpenCat(openCatId)
   }, [openCatId])
@@ -393,14 +435,7 @@ export default function App() {
         </nav>
 
         <div className="nb-right">
-          <div className="lang-pick">
-            <span>🌐</span>
-            <select aria-label="Language" value={lang} onChange={e => setLang(e.target.value)}>
-              {AVAILABLE_LANGS.map(code => (
-                <option key={code} value={code}>{LANGS[code].label}</option>
-              ))}
-            </select>
-          </div>
+          <LangPicker lang={lang} onChange={setLang} />
           <button className={`burger${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(v => !v)} aria-label="Menu">
             <span /><span /><span />
           </button>
