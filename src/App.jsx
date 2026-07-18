@@ -69,6 +69,7 @@ const NAV_ITEMS = [
   { id: 'contact',   key: 'nav.contact' },
 ]
 
+// ── Video Modal ──
 function VideoModal({ video, lang, onClose }) {
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
@@ -101,6 +102,7 @@ function VideoModal({ video, lang, onClose }) {
   )
 }
 
+// ── Video Card ──
 function VideoCard({ video, index, onPlay, lang }) {
   return (
     <button className="vcard" onClick={() => onPlay(video)} style={{ '--delay': `${index * 0.07}s` }}>
@@ -121,13 +123,29 @@ function VideoCard({ video, index, onPlay, lang }) {
   )
 }
 
+// ── Category Row (Accordion) ──
 function CatRow({ cat, onPlay, lang, open, onToggle }) {
   const videos = VIDEOS[cat.id] || []
+  const bodyRef = useRef(null)
+  const rowRef = useRef(null)
+
+  // Scroll the opened category into view when it expands
+  useEffect(() => {
+    if (open && rowRef.current) {
+      // Small delay to let the DOM finish rendering
+      requestAnimationFrame(() => {
+        rowRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      })
+    }
+  }, [open])
+
   return (
-    <div className="catrow" style={{ '--cc': cat.color }}>
+    <div ref={rowRef} className={`catrow${open ? ' catrow--open' : ''}`} style={{ '--cc': cat.color }}>
       <button className="catrow-head" onClick={onToggle}>
         <div className="catrow-left">
-          <span className="catrow-icon">{cat.icon}</span>
+          <div className="catrow-icon-wrap" style={{ background: `${cat.color}1a`, borderColor: `${cat.color}40` }}>
+            <span className="catrow-icon">{cat.icon}</span>
+          </div>
           <div className="catrow-text">
             <span className="catrow-label">{t(cat.key, lang)}</span>
             <span className="catrow-desc">{t(cat.descKey, lang)}</span>
@@ -135,20 +153,29 @@ function CatRow({ cat, onPlay, lang, open, onToggle }) {
         </div>
         <div className="catrow-right">
           <span className="catrow-count">{videos.length} {t('tuts.videoCount', lang)}</span>
-          <span className={`catrow-arrow${open ? ' open' : ''}`}>›</span>
+          <span className={`catrow-arrow${open ? ' open' : ''}`} aria-hidden>›</span>
         </div>
       </button>
-      {open && (
-        <div className="catrow-body">
+      <div
+        ref={bodyRef}
+        className="catrow-body"
+        style={{
+          gridTemplateRows: open ? '1fr' : '0fr',
+          opacity: open ? 1 : 0,
+          padding: open ? '16px 20px' : '0 20px',
+        }}
+      >
+        <div className="catrow-body-inner">
           {videos.map((v, i) => (
             <VideoCard key={v.id + i} video={v} index={i} onPlay={onPlay} lang={lang} />
           ))}
         </div>
-      )}
+      </div>
     </div>
   )
 }
 
+// ── Home Page ──
 function HomePage({ navigate, onPlay, lang }) {
   const featured = VIDEOS.faceAuth[0]
   return (
@@ -197,10 +224,12 @@ function HomePage({ navigate, onPlay, lang }) {
         <div className="cat-grid">
           {CATS.map((c, i) => (
             <button key={c.id} className="cat-card" style={{ '--cc': c.color, '--delay': `${i * 0.06}s` }} onClick={() => navigate('tutorials', c.id)}>
-              <span className="cat-icon">{c.icon}</span>
-              <strong>{t(c.key, lang)}</strong>
-              <p>{t(c.descKey, lang)}</p>
-              <span className="cat-count">{(VIDEOS[c.id]||[]).length} {t('tuts.videoCount', lang)}</span>
+              <div className="cat-card-icon" style={{ background: `${c.color}1a` }}>{c.icon}</div>
+              <div className="cat-card-body">
+                <strong>{t(c.key, lang)}</strong>
+                <p>{t(c.descKey, lang)}</p>
+              </div>
+              <span className="cat-card-count">{(VIDEOS[c.id]||[]).length} {t('tuts.videoCount', lang)} <span className="cat-card-arrow">→</span></span>
             </button>
           ))}
         </div>
@@ -209,25 +238,19 @@ function HomePage({ navigate, onPlay, lang }) {
   )
 }
 
+// ── Tutorials Page ──
 function TutorialsPage({ onPlay, openCatId, lang }) {
   const [q, setQ] = useState('')
-  // Which category is open (accordion: only one at a time)
-  const [openCat, setOpenCat] = useState(null)
+  // openCat tracks which category is expanded.
+  // Initialize: if openCatId is provided (navigated from home card), use it; otherwise first cat.
+  const [openCat, setOpenCat] = useState(openCatId || CATS[0]?.id || null)
 
-  // When openCatId changes from navigation (e.g. clicking a category on home),
-  // update the open state to that specific category only
+  // When openCatId changes (clicking a different category from home), update immediately
   useEffect(() => {
-    setOpenCat(openCatId)
+    if (openCatId) setOpenCat(openCatId)
   }, [openCatId])
 
-  // On first mount with no specific catId, open the first category
-  useEffect(() => {
-    if (openCat === null) {
-      setOpenCat(CATS[0]?.id || null)
-    }
-  }, [])
-
-  const list = q.trim()
+  const filtered = q.trim()
     ? CATS.filter(c =>
         t(c.key, lang).toLowerCase().includes(q.toLowerCase()) ||
         t(c.descKey, lang).toLowerCase().includes(q.toLowerCase()) ||
@@ -246,9 +269,9 @@ function TutorialsPage({ onPlay, openCatId, lang }) {
         <input type="search" placeholder={t('tuts.search', lang)} value={q} onChange={e => setQ(e.target.value)} />
         {q && <button className="search-x" onClick={() => setQ('')}>✕</button>}
       </div>
-      {list.length === 0 && <div className="empty">{t('tuts.noResults', lang)} &ldquo;<strong>{q}</strong>&rdquo;</div>}
+      {filtered.length === 0 && <div className="empty">{t('tuts.noResults', lang)} &ldquo;<strong>{q}</strong>&rdquo;</div>}
       <div className="cat-list">
-        {list.map((c) => (
+        {filtered.map((c) => (
           <CatRow
             key={c.id}
             cat={c}
@@ -262,6 +285,8 @@ function TutorialsPage({ onPlay, openCatId, lang }) {
     </div>
   )
 }
+
+// ── About Page ──
 function AboutPage({ lang }) {
   const items = [
     { icon: '🎯', titleKey: 'about.missionTitle', bodyKey: 'about.missionBody' },
@@ -290,6 +315,7 @@ function AboutPage({ lang }) {
   )
 }
 
+// ── Contact Page ──
 function ContactPage({ lang }) {
   return (
     <div className="page">
@@ -323,6 +349,7 @@ function ContactPage({ lang }) {
   )
 }
 
+// ── App Root ──
 export default function App() {
   const [page, setPage]       = useState('home')
   const [catId, setCatId]     = useState(null)
@@ -342,7 +369,6 @@ export default function App() {
     return () => document.removeEventListener('mousedown', fn)
   }, [])
 
-  // Set dir attribute on html element for RTL support
   useEffect(() => {
     document.documentElement.dir = LANGS[lang]?.dir || 'ltr'
   }, [lang])
@@ -369,11 +395,7 @@ export default function App() {
         <div className="nb-right">
           <div className="lang-pick">
             <span>🌐</span>
-            <select
-              aria-label="Language"
-              value={lang}
-              onChange={e => setLang(e.target.value)}
-            >
+            <select aria-label="Language" value={lang} onChange={e => setLang(e.target.value)}>
               {AVAILABLE_LANGS.map(code => (
                 <option key={code} value={code}>{LANGS[code].label}</option>
               ))}
@@ -397,7 +419,7 @@ export default function App() {
             <div className="drawer-group">
               {CATS.map(c => (
                 <button key={c.id} className="drawer-item" onClick={() => navigate('tutorials', c.id)}>
-                  {c.icon} {t(c.key, lang)}
+                  <span className="drawer-cat-icon">{c.icon}</span> {t(c.key, lang)}
                 </button>
               ))}
             </div>
