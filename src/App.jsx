@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 import { t, LANGS, AVAILABLE_LANGS } from './translations'
+
+const BASE = import.meta.env.BASE_URL || '/'
 
 const VIDEOS = {
   faceAuth: [
@@ -87,12 +89,12 @@ function LangPicker({ lang, onChange }) {
   return (
     <div className="lang-picker" ref={ref}>
       <button className="lang-trigger" onClick={() => setOpen(v => !v)} aria-haspopup="listbox" aria-expanded={open}>
-        <span className="lang-trigger-globe">🌐</span>
+        <span className="lang-trigger-globe" aria-hidden="true">🌐</span>
         <span className="lang-trigger-code">{lang}</span>
-        <span className={`lang-trigger-chev${open ? ' open' : ''}`}>▾</span>
+        <span className={`lang-trigger-chev${open ? ' open' : ''}`} aria-hidden="true">▾</span>
       </button>
       {open && (
-        <div className="lang-menu" role="listbox">
+        <div className="lang-menu" role="listbox" aria-label="Select language">
           {AVAILABLE_LANGS.map(code => {
             const l = LANGS[code]
             return (
@@ -103,10 +105,10 @@ function LangPicker({ lang, onChange }) {
                 className={`lang-opt${lang === code ? ' active' : ''}`}
                 onClick={() => { onChange(code); setOpen(false) }}
               >
-                <span className="lang-opt-flag">{LANG_FLAGS[code]}</span>
+                <span className="lang-opt-flag" aria-hidden="true">{LANG_FLAGS[code]}</span>
                 <span className="lang-opt-name">{l.name}</span>
                 <span className="lang-opt-code">{l.label}</span>
-                {lang === code && <span className="lang-opt-check">✓</span>}
+                {lang === code && <span className="lang-opt-check" aria-label="Selected">✓</span>}
               </button>
             )
           })}
@@ -118,22 +120,58 @@ function LangPicker({ lang, onChange }) {
 
 // ── Video Modal ──
 function VideoModal({ video, lang, onClose }) {
+  const closeRef = useRef(onClose)
+  const overlayRef = useRef(null)
+  const prevFocusRef = useRef(null)
+
+  // Keep the latest onClose in a ref so the effect doesn't need to re-run
+  useEffect(() => { closeRef.current = onClose }, [onClose])
+
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    // Save previously focused element
+    prevFocusRef.current = document.activeElement
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        closeRef.current()
+        return
+      }
+      // Basic focus trap
+      if (e.key === 'Tab' && overlayRef.current) {
+        const focusable = overlayRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        if (focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
+    }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
+
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
+      // Restore focus
+      if (prevFocusRef.current && typeof prevFocusRef.current.focus === 'function') {
+        prevFocusRef.current.focus()
+      }
     }
-  }, [onClose])
+  }, []) // no deps — closeRef keeps it stable
 
   return (
-    <div className="overlay" onClick={onClose}>
+    <div className="overlay" onClick={onClose} ref={overlayRef} role="dialog" aria-modal="true" aria-label={video.titleEn}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3 className="modal-title">{video.titleEn}</h3>
-          <button className="modal-close" onClick={onClose}>✕</button>
+          <h2 className="modal-title">{video.titleEn}</h2>
+          <button className="modal-close" onClick={onClose} aria-label="Close video">✕</button>
         </div>
         <div className="modal-video">
           <iframe
@@ -152,10 +190,10 @@ function VideoModal({ video, lang, onClose }) {
 // ── Video Card ──
 function VideoCard({ video, index, onPlay, lang }) {
   return (
-    <button className="vcard" onClick={() => onPlay(video)} style={{ '--delay': `${index * 0.07}s` }}>
+    <button className="vcard" onClick={() => onPlay(video)} style={{ '--delay': `${index * 0.07}s` }} aria-label={`${t('tuts.watchNow', lang)}: ${video.titleEn}`}>
       <div className="vcard-thumb">
         <img src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`} alt={video.titleEn} loading="lazy" />
-        <div className="vcard-overlay">
+        <div className="vcard-overlay" aria-hidden="true">
           <div className="vcard-play">
             <svg viewBox="0 0 24 24" fill="white" width="36" height="36"><path d="M8 5v14l11-7z" /></svg>
           </div>
@@ -163,7 +201,7 @@ function VideoCard({ video, index, onPlay, lang }) {
         <span className="vcard-num">#{index + 1}</span>
       </div>
       <div className="vcard-info">
-        <p className="vcard-title">{video.titleEn}</p>
+        <span className="vcard-title">{video.titleEn}</span>
         <span className="vcard-cta">{t('tuts.watchNow', lang)} →</span>
       </div>
     </button>
@@ -178,18 +216,24 @@ function CatRow({ cat, onPlay, lang, open, onToggle }) {
 
   useEffect(() => {
     if (open && rowRef.current) {
-      requestAnimationFrame(() => {
+      const id = requestAnimationFrame(() => {
         rowRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       })
+      return () => cancelAnimationFrame(id)
     }
   }, [open])
 
   return (
     <div ref={rowRef} className={`catrow${open ? ' catrow--open' : ''}`} style={{ '--cc': cat.color }}>
-      <button className="catrow-head" onClick={onToggle}>
+      <button
+        className="catrow-head"
+        onClick={onToggle}
+        aria-expanded={open}
+        aria-controls={`cat-body-${cat.id}`}
+      >
         <div className="catrow-left">
           <div className="catrow-icon-wrap" style={{ background: `${cat.color}1a`, borderColor: `${cat.color}40` }}>
-            <span className="catrow-icon">{cat.icon}</span>
+            <span className="catrow-icon" aria-hidden="true">{cat.icon}</span>
           </div>
           <div className="catrow-text">
             <span className="catrow-label">{t(cat.key, lang)}</span>
@@ -198,12 +242,15 @@ function CatRow({ cat, onPlay, lang, open, onToggle }) {
         </div>
         <div className="catrow-right">
           <span className="catrow-count">{videos.length} {t('tuts.videoCount', lang)}</span>
-          <span className={`catrow-arrow${open ? ' open' : ''}`} aria-hidden>›</span>
+          <span className={`catrow-arrow${open ? ' open' : ''}`} aria-hidden="true">›</span>
         </div>
       </button>
       <div
         ref={bodyRef}
         className="catrow-body"
+        id={`cat-body-${cat.id}`}
+        role="region"
+        aria-labelledby={`cat-head-${cat.id}`}
         style={{
           gridTemplateRows: open ? '1fr' : '0fr',
           opacity: open ? 1 : 0,
@@ -211,8 +258,8 @@ function CatRow({ cat, onPlay, lang, open, onToggle }) {
         }}
       >
         <div className="catrow-body-inner">
-          {videos.map((v, i) => (
-            <VideoCard key={v.id + i} video={v} index={i} onPlay={onPlay} lang={lang} />
+          {videos.map((v) => (
+            <VideoCard key={v.id} video={v} index={videos.indexOf(v)} onPlay={onPlay} lang={lang} />
           ))}
         </div>
       </div>
@@ -221,27 +268,27 @@ function CatRow({ cat, onPlay, lang, open, onToggle }) {
 }
 
 // ── Home Page ──
-function HomePage({ navigate, onPlay, lang }) {
+function HomePage({ setPage, onPlay, lang }) {
   const featured = VIDEOS.faceAuth[0]
   return (
     <div className="page">
-      <section className="hero">
-        <div className="hero-orb orb1" />
-        <div className="hero-orb orb2" />
-        <div className="hero-orb orb3" />
+      <section className="hero" aria-label="Hero">
+        <div className="hero-orb orb1" aria-hidden="true" />
+        <div className="hero-orb orb2" aria-hidden="true" />
+        <div className="hero-orb orb3" aria-hidden="true" />
         <div className="hero-inner">
-          <div className="hero-badge"><span className="live-dot" />{t('home.badge', lang)}</div>
+          <div className="hero-badge"><span className="live-dot" aria-hidden="true" />{t('home.badge', lang)}</div>
           <h1 className="hero-h1">{t('home.title1', lang)}<span className="hero-accent">{t('home.title2', lang)}</span></h1>
           <p className="hero-p">{t('home.desc', lang)}</p>
           <div className="hero-btns">
-            <button className="btn-primary" onClick={() => navigate('tutorials')}>{t('home.browseBtn', lang)} <span>→</span></button>
-            <button className="btn-outline" onClick={() => onPlay(featured)}><span className="tri">▶</span> {t('home.watchBtn', lang)}</button>
+            <button className="btn-primary" onClick={() => setPage('tutorials')}>{t('home.browseBtn', lang)} <span aria-hidden="true">→</span></button>
+            <button className="btn-outline" onClick={() => onPlay(featured)}><span className="tri" aria-hidden="true">▶</span> {t('home.watchBtn', lang)}</button>
           </div>
         </div>
         <div className="hero-stats">
           {[['9', t('home.statCategories', lang)], ['27+', t('home.statVideos', lang)], ['24/7', t('home.statAccess', lang)], ['6', t('home.statLanguages', lang)]].map(([n, l], i) => (
             <div key={l} className="hsg">
-              {i > 0 && <div className="hsd" />}
+              {i > 0 && <div className="hsd" aria-hidden="true" />}
               <div className="hs"><strong>{n}</strong><span>{l}</span></div>
             </div>
           ))}
@@ -249,15 +296,15 @@ function HomePage({ navigate, onPlay, lang }) {
       </section>
 
       <section className="section">
-        <div className="sec-title"><span>⭐</span> {t('home.featuredTitle', lang)} <div className="sec-line" /></div>
-        <button className="feat" onClick={() => onPlay(featured)}>
+        <div className="sec-title"><span aria-hidden="true">⭐</span> {t('home.featuredTitle', lang)} <div className="sec-line" aria-hidden="true" /></div>
+        <button className="feat" onClick={() => onPlay(featured)} aria-label={`${t('home.featuredTitle', lang)}: ${featured.titleEn}`}>
           <div className="feat-thumb">
             <img src={`https://img.youtube.com/vi/${featured.id}/hqdefault.jpg`} alt={featured.titleEn} />
-            <div className="feat-play"><svg viewBox="0 0 24 24" fill="white" width="52" height="52"><path d="M8 5v14l11-7z" /></svg></div>
+            <div className="feat-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="white" width="52" height="52"><path d="M8 5v14l11-7z" /></svg></div>
           </div>
           <div className="feat-info">
             <span className="feat-badge">🔥 {t('home.featuredBadge', lang)}</span>
-            <h3>{featured.titleEn}</h3>
+            <span className="feat-title">{featured.titleEn}</span>
             <p>{t('home.featuredDesc', lang)}</p>
             <span className="feat-cta">{t('home.watchNow', lang)} →</span>
           </div>
@@ -265,16 +312,16 @@ function HomePage({ navigate, onPlay, lang }) {
       </section>
 
       <section className="section">
-        <div className="sec-title"><span>📚</span> {t('home.allCategories', lang)} <div className="sec-line" /></div>
-        <div className="cat-grid">
-          {CATS.map((c, i) => (
-            <button key={c.id} className="cat-card" style={{ '--cc': c.color, '--delay': `${i * 0.06}s` }} onClick={() => navigate('tutorials', c.id)}>
-              <div className="cat-card-icon" style={{ background: `${c.color}1a` }}>{c.icon}</div>
+        <div className="sec-title"><span aria-hidden="true">📚</span> {t('home.allCategories', lang)} <div className="sec-line" aria-hidden="true" /></div>
+        <div className="cat-grid" role="list" aria-label={t('home.allCategories', lang)}>
+          {CATS.map((c) => (
+            <button key={c.id} className="cat-card" style={{ '--cc': c.color, '--delay': `${CATS.indexOf(c) * 0.06}s` }} onClick={() => setPage('tutorials', c.id)} role="listitem">
+              <div className="cat-card-icon" aria-hidden="true" style={{ background: `${c.color}1a` }}>{c.icon}</div>
               <div className="cat-card-body">
                 <strong>{t(c.key, lang)}</strong>
                 <p>{t(c.descKey, lang)}</p>
               </div>
-              <span className="cat-card-count">{(VIDEOS[c.id]||[]).length} {t('tuts.videoCount', lang)} <span className="cat-card-arrow">→</span></span>
+              <span className="cat-card-count">{(VIDEOS[c.id]||[]).length} {t('tuts.videoCount', lang)} <span className="cat-card-arrow" aria-hidden="true">→</span></span>
             </button>
           ))}
         </div>
@@ -286,11 +333,13 @@ function HomePage({ navigate, onPlay, lang }) {
 // ── Tutorials Page ──
 function TutorialsPage({ onPlay, openCatId, lang }) {
   const [q, setQ] = useState('')
+  const searchRef = useRef(null)
   const [openCat, setOpenCat] = useState(openCatId || CATS[0]?.id || null)
 
+  // Sync when navigating from home with a category
   useEffect(() => {
     if (openCatId) setOpenCat(openCatId)
-  }, [openCatId])
+  }, [openCatId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const filtered = q.trim()
     ? CATS.filter(c =>
@@ -300,16 +349,28 @@ function TutorialsPage({ onPlay, openCatId, lang }) {
       )
     : CATS
 
+  const resultsId = 'search-results-count'
+
   return (
     <div className="page">
       <div className="page-hd">
         <h1>🎬 {t('tuts.title', lang)}</h1>
         <p>{t('tuts.desc', lang)}</p>
       </div>
-      <div className="searchbox">
-        <span>🔍</span>
-        <input type="search" placeholder={t('tuts.search', lang)} value={q} onChange={e => setQ(e.target.value)} />
-        {q && <button className="search-x" onClick={() => setQ('')}>✕</button>}
+      <div className="searchbox" role="search">
+        <span aria-hidden="true">🔍</span>
+        <input
+          ref={searchRef}
+          type="search"
+          placeholder={t('tuts.search', lang)}
+          value={q}
+          onChange={e => setQ(e.target.value)}
+          aria-describedby={resultsId}
+        />
+        {q && <button className="search-x" onClick={() => { setQ(''); searchRef.current?.focus() }} aria-label="Clear search">✕</button>}
+      </div>
+      <div id={resultsId} className="sr-only" aria-live="polite">
+        {filtered.length} {t('tuts.videoCount', lang)}
       </div>
       {filtered.length === 0 && <div className="empty">{t('tuts.noResults', lang)} &ldquo;<strong>{q}</strong>&rdquo;</div>}
       <div className="cat-list">
@@ -345,10 +406,10 @@ function AboutPage({ lang }) {
         <p>{t('about.desc', lang)}</p>
       </div>
       <div className="about-grid">
-        {items.map((it, i) => (
-          <div key={it.titleKey} className="about-card" style={{ '--delay': `${i * 0.08}s` }}>
-            <span className="about-icon">{it.icon}</span>
-            <h3>{t(it.titleKey, lang)}</h3>
+        {items.map((it) => (
+          <div key={it.titleKey} className="about-card" style={{ '--delay': `${items.indexOf(it) * 0.08}s` }}>
+            <span className="about-icon" aria-hidden="true">{it.icon}</span>
+            <h2 className="about-card-title">{t(it.titleKey, lang)}</h2>
             <p>{t(it.bodyKey, lang)}</p>
           </div>
         ))}
@@ -367,24 +428,24 @@ function ContactPage({ lang }) {
       </div>
       <div className="contact-grid">
         <a href="mailto:hello@halamobile.com" className="contact-card">
-          <span className="contact-icon">✉️</span>
+          <span className="contact-icon" aria-hidden="true">✉️</span>
           <div><strong>{t('contact.emailLabel', lang)}</strong><span>hello@halamobile.com</span><p>{t('contact.emailDesc', lang)}</p></div>
         </a>
         <a href="tel:+1234567890" className="contact-card">
-          <span className="contact-icon">📞</span>
+          <span className="contact-icon" aria-hidden="true">📞</span>
           <div><strong>{t('contact.phoneLabel', lang)}</strong><span>+1 234 567 890</span><p>{t('contact.phoneDesc', lang)}</p></div>
         </a>
         <a href="https://wa.me/1234567890" target="_blank" rel="noreferrer" className="contact-card">
-          <span className="contact-icon">💬</span>
+          <span className="contact-icon" aria-hidden="true">💬</span>
           <div><strong>{t('contact.whatsappLabel', lang)}</strong><span>+1 234 567 890</span><p>{t('contact.whatsappDesc', lang)}</p></div>
         </a>
         <div className="contact-card no-hover">
-          <span className="contact-icon">🪪</span>
+          <span className="contact-icon" aria-hidden="true">🪪</span>
           <div><strong>{t('contact.agencyLabel', lang)}</strong><span>1099400</span><p>{t('contact.agencyDesc', lang)}</p></div>
         </div>
       </div>
       <div className="contact-note">
-        <span>💡</span>
+        <span aria-hidden="true">💡</span>
         <p>{t('contact.note', lang)}</p>
       </div>
     </div>
@@ -400,10 +461,12 @@ export default function App() {
   const [lang, setLang]       = useState('EN')
   const drawerRef = useRef(null)
 
-  const navigate = (p, c) => {
+  const navigate = useCallback((p, c) => {
     setPage(p); setCatId(c || null); setMenuOpen(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  }, [])
+
+  const closePlaying = useCallback(() => setPlaying(null), [])
 
   useEffect(() => {
     const fn = (e) => { if (drawerRef.current && !drawerRef.current.contains(e.target)) setMenuOpen(false) }
@@ -419,14 +482,14 @@ export default function App() {
     <div className={`app${LANGS[lang]?.dir === 'rtl' ? ' rtl' : ''}`}>
       <header className="navbar">
         <button className="nb-brand" onClick={() => navigate('home')}>
-          <img src="/mame-logo.jpg" alt="Mame Family" className="nb-logo" />
+          <img src={`${BASE}mame-logo.jpg`} alt="Mame Family" className="nb-logo" />
           <div className="nb-info">
             <span className="nb-name">{t('nav.brand', lang)}</span>
             <span className="nb-id">{t('nav.id', lang)}</span>
           </div>
         </button>
 
-        <nav className="nb-nav">
+        <nav className="nb-nav" aria-label="Main navigation">
           {NAV_ITEMS.map(n => (
             <button key={n.id} className={`nb-link${page === n.id ? ' active' : ''}`} onClick={() => navigate(n.id)}>
               {t(n.key, lang)}
@@ -436,13 +499,13 @@ export default function App() {
 
         <div className="nb-right">
           <LangPicker lang={lang} onChange={setLang} />
-          <button className={`burger${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(v => !v)} aria-label="Menu">
+          <button className={`burger${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(v => !v)} aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen}>
             <span /><span /><span />
           </button>
         </div>
 
         {menuOpen && (
-          <div className="drawer" ref={drawerRef}>
+          <div className="drawer" ref={drawerRef} role="navigation" aria-label="Mobile navigation">
             <div className="drawer-group">
               {NAV_ITEMS.map(n => (
                 <button key={n.id} className={`drawer-item${page === n.id ? ' active' : ''}`} onClick={() => navigate(n.id)}>
@@ -454,7 +517,7 @@ export default function App() {
             <div className="drawer-group">
               {CATS.map(c => (
                 <button key={c.id} className="drawer-item" onClick={() => navigate('tutorials', c.id)}>
-                  <span className="drawer-cat-icon">{c.icon}</span> {t(c.key, lang)}
+                  <span className="drawer-cat-icon" aria-hidden="true">{c.icon}</span> {t(c.key, lang)}
                 </button>
               ))}
             </div>
@@ -462,17 +525,17 @@ export default function App() {
         )}
       </header>
 
-      <main className="main">
-        {page === 'home'      && <HomePage      navigate={navigate} onPlay={setPlaying} lang={lang} />}
+      <main className="main" id="main-content">
+        {page === 'home'      && <HomePage      setPage={navigate} onPlay={setPlaying} lang={lang} />}
         {page === 'tutorials' && <TutorialsPage onPlay={setPlaying} openCatId={catId} lang={lang} />}
         {page === 'about'     && <AboutPage lang={lang} />}
         {page === 'contact'   && <ContactPage lang={lang} />}
       </main>
 
-      <footer className="footer">
+      <footer className="footer" role="contentinfo">
         <div className="footer-body">
           <div className="footer-brand">
-            <img src="/mame-logo.jpg" alt="Mame Family" className="footer-logo" />
+            <img src={`${BASE}mame-logo.jpg`} alt="Mame Family" className="footer-logo" />
             <div>
               <div className="footer-name">{t('nav.brand', lang)}</div>
               <div className="footer-sub">{t('nav.subtitle', lang)}</div>
@@ -500,7 +563,7 @@ export default function App() {
         </div>
       </footer>
 
-      {playing && <VideoModal video={playing} lang={lang} onClose={() => setPlaying(null)} />}
+      {playing && <VideoModal video={playing} lang={lang} onClose={closePlaying} />}
     </div>
   )
 }

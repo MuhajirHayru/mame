@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 /* ── TOKENS ── */
 :root {
   --bg:            #03060f;
@@ -53,6 +51,17 @@ button, select { font: inherit; cursor: pointer; border: none; outline: none; }
 a { text-decoration: none; color: inherit; }
 input[type="search"] { font: inherit; border: none; outline: none; background: transparent; color: var(--text); }
 
+/* ── Screen-reader only utility ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ══════════════════════════════════════
    APP
 ══════════════════════════════════════ */
@@ -61,42 +70,172 @@ input[type="search"] { font: inherit; border: none; outline: none; background: t
   margin: 0 auto;
   padding: 0 20px 60px;
 }
+
+/* ── RTL ── */
 .app.rtl {
   direction: rtl;
 }
+
 .app.rtl .hero-h1 {
   letter-spacing: 0;
 }
+
 .app.rtl .nb-name,
 .app.rtl .nb-id {
   text-align: right;
 }
+
 .app.rtl .hero-btns {
   flex-direction: row-reverse;
 }
+
 .app.rtl .catrow-head {
   text-align: right;
 }
+
 .app.rtl .catrow-arrow {
   transform: rotate(180deg);
 }
+
 .app.rtl .catrow-arrow.open {
   transform: rotate(-90deg);
 }
+
 .app.rtl .feat-cta,
 .app.rtl .vcard-cta,
 .app.rtl .btn-primary span {
   transform: scaleX(-1);
 }
+
 .app.rtl .feat:hover .feat-cta,
 .app.rtl .vcard:hover .vcard-cta {
   gap: 8px;
 }
+
 .app.rtl .footer-link {
   text-align: right;
 }
+
 .app.rtl .sec-line {
   background: linear-gradient(270deg, var(--border-accent), transparent);
+}
+
+/* RTL — Search */
+.app.rtl .searchbox {
+  flex-direction: row-reverse;
+}
+
+.app.rtl .searchbox input {
+  text-align: right;
+}
+
+/* RTL — About cards */
+.app.rtl .about-card {
+  text-align: right;
+}
+
+/* RTL — Contact cards */
+.app.rtl .contact-card {
+  text-align: right;
+}
+
+.app.rtl .contact-card div {
+  text-align: right;
+}
+
+/* RTL — Category grid cards */
+.app.rtl .cat-card {
+  text-align: right;
+}
+
+.app.rtl .cat-card-count {
+  direction: ltr;
+  justify-content: flex-end;
+}
+
+.app.rtl .cat-card-icon {
+  align-self: flex-end;
+}
+
+.app.rtl .cat-card-arrow {
+  transform: scaleX(-1);
+}
+
+.app.rtl .cat-card:hover .cat-card-arrow {
+  transform: scaleX(-1) translateX(-4px);
+}
+
+/* RTL — Video card */
+.app.rtl .vcard {
+  text-align: right;
+}
+
+.app.rtl .vcard-num {
+  left: auto;
+  right: 10px;
+}
+
+.app.rtl .vcard:hover .vcard-cta {
+  gap: 8px;
+}
+
+/* RTL — Modal */
+.app.rtl .modal-header {
+  flex-direction: row-reverse;
+}
+
+.app.rtl .modal-title {
+  text-align: right;
+}
+
+.app.rtl .modal-footer {
+  direction: ltr;
+}
+
+/* RTL — Featured card */
+.app.rtl .feat {
+  text-align: right;
+}
+
+.app.rtl .feat-info {
+  text-align: right;
+}
+
+.app.rtl .feat:hover .feat-cta {
+  gap: 8px;
+}
+
+/* RTL — Footer */
+.app.rtl .footer-body {
+  flex-direction: row-reverse;
+}
+
+.app.rtl .footer-brand {
+  flex-direction: row-reverse;
+}
+
+.app.rtl .footer-col {
+  text-align: right;
+}
+
+.app.rtl .drawer-item {
+  text-align: right;
+}
+
+.app.rtl .drawer-label {
+  text-align: right;
+}
+
+.app.rtl .catrow-left {
+  text-align: right;
+}
+
+.app.rtl .catrow-right {
+  flex-direction: row-reverse;
+}
+
+.app.rtl .contact-note {
+  text-align: right;
 }
 
 /* ══════════════════════════════════════
@@ -768,10 +907,11 @@ input[type="search"] { font: inherit; border: none; outline: none; background: t
   width: fit-content;
 }
 
-.feat-info h3 {
+.feat-title {
   font-size: 18px;
   font-weight: 700;
   line-height: 1.3;
+  display: block;
 }
 
 .feat-info p {
@@ -1245,16 +1385,6 @@ input[type="search"] { font: inherit; border: none; outline: none; background: t
   text-align: center;
 }
 
-.modal-footer kbd {
-  font-family: inherit;
-  padding: 1px 6px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: var(--surface);
-  font-size: 11px;
-  font-weight: 600;
-}
-
 /* ══════════════════════════════════════
    ABOUT
 ══════════════════════════════════════ */
@@ -1286,7 +1416,7 @@ input[type="search"] { font: inherit; border: none; outline: none; background: t
   line-height: 1;
 }
 
-.about-card h3 {
+.about-card-title {
   font-size: 17px;
   font-weight: 700;
 }
@@ -1473,6 +1603,34 @@ input[type="search"] { font: inherit; border: none; outline: none; background: t
 }
 
 /* ══════════════════════════════════════
+   PREFERS-REDUCED-MOTION
+══════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-orb, .live-dot {
+    animation: none !important;
+  }
+
+  .page {
+    animation: none !important;
+  }
+
+  .modal {
+    animation: none !important;
+  }
+
+  .overlay {
+    animation: none !important;
+  }
+}
+
+/* ══════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════ */
 
@@ -1504,7 +1662,7 @@ input[type="search"] { font: inherit; border: none; outline: none; background: t
   .feat-info {
     padding: 20px 24px;
   }
-  .feat-info h3 {
+  .feat-title {
     font-size: 16px;
   }
 }
@@ -1761,7 +1919,7 @@ input[type="search"] { font: inherit; border: none; outline: none; background: t
     font-size: 28px;
   }
 
-  .about-card h3 {
+  .about-card-title {
     font-size: 15px;
   }
 
