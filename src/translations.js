@@ -14,12 +14,12 @@ export const AVAILABLE_LANGS = ['EN', 'FR', 'AR', 'AM', 'OM', 'TL']
 const T = {
   // ★ Nav
   'nav.brand': {
-    EN: 'Mame Family',
-    FR: 'Famille Mame',
-    AR: 'عائلة مام',
-    AM: 'ማሜ ቤተሰብ',
-    OM: 'Maatii Mame',
-    TL: 'Pamilya Mame',
+    EN: 'mamehala',
+    FR: 'mamehala',
+    AR: 'mamehala',
+    AM: 'mamehala',
+    OM: 'mamehala',
+    TL: 'mamehala',
   },
   'nav.id': {
     EN: 'ID: 1099400',
@@ -53,12 +53,12 @@ const T = {
     TL: 'Plataporma ng Interactive na Pagsasanay',
   },
   'home.title1': {
-    EN: 'Mame Family',
-    FR: 'Famille Mame',
-    AR: 'عائلة مام',
-    AM: 'ማሜ ቤተሰብ',
-    OM: 'Maatii Mame',
-    TL: 'Pamilya Mame',
+    EN: 'mamehala',
+    FR: 'mamehala',
+    AR: 'mamehala',
+    AM: 'mamehala',
+    OM: 'mamehala',
+    TL: 'mamehala',
   },
   'home.title2': {
     EN: ' Training Hub',
@@ -175,12 +175,12 @@ const T = {
 
   // ★ About
   'about.title': {
-    EN: 'About Mame Family',
-    FR: 'À propos de Famille Mame',
-    AR: 'حول عائلة مام',
-    AM: 'ስለ ማሜ ቤተሰብ',
-    OM: 'Waa\'ee Maatii Mame',
-    TL: 'Tungkol sa Pamilya Mame',
+    EN: 'About mamehala',
+    FR: 'À propos de mamehala',
+    AR: 'حول mamehala',
+    AM: 'ስለ mamehala',
+    OM: 'Waa\'ee mamehala',
+    TL: 'Tungkol sa mamehala',
   },
   'about.desc': {
     EN: 'Everything you need to know about who we are and what we do.',
@@ -194,12 +194,12 @@ const T = {
   // About cards
   'about.missionTitle':   { EN: 'Our Mission',     FR: 'Notre mission',      AR: 'مهمتنا',              AM: 'ተልእኳችን',            OM: 'Hojiin keenya',            TL: 'Aming Misyon' },
   'about.missionBody': {
-    EN: 'Mame Family is a dedicated training hub for hosts and agents on the Hala live streaming platform. We provide clear, step-by-step video guides in multiple languages.',
-    FR: 'Famille Mame est un centre de formation dédié aux hôtes et agents sur la plateforme de streaming en direct Hala. Nous fournissons des guides vidéo clairs et détaillés en plusieurs langues.',
-    AR: 'عائلة مام هي مركز تدريب مخصص للمضيفين والوكلاء على منصة البث المباشر هالة. نقدم أدلة فيديو واضحة وخطوة بخطوة بعدة لغات.',
-    AM: 'ማሜ ቤተሰብ በሃላ የቀጥታ ስርጭት መድረክ ላይ ለአስተናጋጆች እና ወኪሎች የተወሰነ የስልጠና ማዕከል ነው። በበርካታ ቋንቋዎች ግልጽ የሆኑ የደረጃ በደረጃ የቪዲዮ መመሪያዎችን እናቀርባለን።',
-    OM: 'Maatii Mame gidduu barnootaa kan abbaa manaatiifi bakka bu\'ootaaf platforma Hala irratti. Qajeelfama viidiyoo ifaa, tarkaanfii tarkaanfiin afaanota baay\'ee keessatti ni kennina.',
-    TL: 'Ang Pamilya Mame ay isang dedikadong sentro ng pagsasanay para sa mga host at agent sa Hala live streaming platform. Nagbibigay kami ng malinaw, step-by-step na mga gabay sa video sa maraming wika.',
+    EN: 'mamehala is a dedicated training hub for hosts and agents on the Hala live streaming platform. We provide clear, step-by-step video guides in multiple languages.',
+    FR: 'mamehala est un centre de formation dédié aux hôtes et agents sur la plateforme de streaming en direct Hala. Nous fournissons des guides vidéo clairs et détaillés en plusieurs langues.',
+    AR: 'mamehala هي مركز تدريب مخصص للمضيفين والوكلاء على منصة البث المباشر هالة. نقدم أدلة فيديو واضحة وخطوة بخطوة بعدة لغات.',
+    AM: 'mamehala በሃላ የቀጥታ ስርጭት መድረክ ላይ ለአስተናጋጆች እና ወኪሎች የተወሰነ የስልጠና ማዕከል ነው። በበርካታ ቋንቋዎች ግልጽ የሆኑ የደረጃ በደረጃ የቪዲዮ መመሪያዎችን እናቀርባለን።',
+    OM: 'mamehala gidduu barnootaa kan abbaa manaatiifi bakka bu\'ootaaf platforma Hala irratti. Qajeelfama viidiyoo ifaa, tarkaanfii tarkaanfiin afaanota baay\'ee keessatti ni kennina.',
+    TL: 'Ang mamehala ay isang dedikadong sentro ng pagsasanay para sa mga host at agent sa Hala live streaming platform. Nagbibigay kami ng malinaw, step-by-step na mga gabay sa video sa maraming wika.',
   },
   'about.whoTitle':   { EN: 'Who We Serve',     FR: 'Qui nous servons',     AR: 'من نخدم',                AM: 'ማንን እናገለግላለን',        OM: 'Een warra tajaajilla',       TL: 'Kami ay Naglilingkod' },
   'about.whoBody': {
@@ -212,12 +212,12 @@ const T = {
   },
   'about.familyIdTitle': { EN: 'Family ID', FR: 'ID Familial', AR: 'معرف العائلة', AM: 'የቤተሰብ መለያ', OM: 'ID Maatii', TL: 'Family ID' },
   'about.familyIdBody': {
-    EN: 'Our official Mame Family agency ID is 1099400. Use this ID when joining or referencing our agency on the Hala platform.',
-    FR: 'Notre ID d\'agence officielle Famille Mame est 1099400. Utilisez cet ID lorsque vous rejoignez ou référez notre agence sur la plateforme Hala.',
-    AR: 'معرف وكالة عائلة مام الرسمي هو 1099400. استخدم هذا المعرف عند الانضمام أو الإشارة إلى وكالتنا على منصة هالة.',
-    AM: 'ኦፊሴላዊው የማሜ ቤተሰብ ኤጀንሲ መለያ 1099400 ነው። በሃላ መድረክ ላይ ኤጀንሲያችንን ሲቀላቀሉ ወይም ሲጠቅሱ ይህን መለያ ይጠቀሙ።',
-    OM: 'ID ajensaa Maatii Mame isa 1099400. Yeroo ajensa keenya Hala platforma irratti hirmaattan ykn waan dubbattan ID kana fayyadamaa.',
-    TL: 'Ang aming opisyal na Mame Family agency ID ay 1099400. Gamitin ang ID na ito kapag sumasali o nagre-refer sa aming agency sa Hala platform.',
+    EN: 'Our official mamehala agency ID is 1099400. Use this ID when joining or referencing our agency on the Hala platform.',
+    FR: 'Notre ID d\'agence officielle mamehala est 1099400. Utilisez cet ID lorsque vous rejoignez ou référez notre agence sur la plateforme Hala.',
+    AR: 'معرف وكالة mamehala الرسمي هو 1099400. استخدم هذا المعرف عند الانضمام أو الإشارة إلى وكالتنا على منصة هالة.',
+    AM: 'ኦፊሴላዊው የ mamehala ኤጀንሲ መለያ 1099400 ነው። በሃላ መድረክ ላይ ኤጀንሲያችንን ሲቀላቀሉ ወይም ሲጠቅሱ ይህን መለያ ይጠቀሙ።',
+    OM: 'ID ajensaa mamehala isa 1099400. Yeroo ajensa keenya Hala platforma irratti hirmaattan ykn waan dubbattan ID kana fayyadamaa.',
+    TL: 'Ang aming opisyal na mamehala agency ID ay 1099400. Gamitin ang ID na ito kapag sumasali o nagre-refer sa aming agency sa Hala platform.',
   },
   'about.whatTitle':   { EN: 'What We Cover',   FR: 'Ce que nous couvrons', AR: 'ما نغطيه',             AM: 'የምንሸፍነው',             OM: 'Waan nuti haguugnu',        TL: 'Ano ang Aming Saklaw' },
   'about.whatBody': {
@@ -239,12 +239,12 @@ const T = {
   },
   'about.growthTitle':   { EN: 'Growing Together', FR: 'Grandir ensemble',   AR: 'ننمو معًا',           AM: 'አብረን ማደግ',             OM: 'Walumaa Guddachuu',         TL: 'Sama-samang Paglago' },
   'about.growthBody': {
-    EN: 'Join hundreds of hosts and agents who have used Mame Family tutorials to grow their presence, increase earnings, and build strong agency networks.',
-    FR: 'Rejoignez des centaines d\'hôtes et d\'agents qui ont utilisé les tutoriels Famille Mame pour développer leur présence, augmenter leurs revenus et construire de solides réseaux d\'agence.',
-    AR: 'انضم إلى المئات من المضيفين والوكلاء الذين استخدموا دروس عائلة مام لتنمية حضورهم وزيادة أرباحهم وبناء شبكات وكالة قوية.',
-    AM: 'መልካም ተገኝተው ማሜ ቤተሰብ ትምህርቶችን በመጠቀም መገኘታቸውን ለማሳደግ፣ ገቢያቸውን ለመጨመር እና ጠንካራ የኤጀንሲ አውታረ መረቦችን ለመገንባት ከቻሉ በመቶዎች የሚቆጠሩ አስተናጋጆች እና ወኪሎች ጋር ይቀላቀሉ።',
-    OM: 'Dhibbaan lakkaa\'aman abbaa manaatiifi bakka bu\'oota qophii Maatii Mame fayyadamanii argamuu isaanii guddisuu, galma isaanii dabaluufi saaphana ajensaa jabaa ijaarratan waliin taa\'aa.',
-    TL: 'Sumali sa daan-daang host at agent na gumamit ng Mame Family tutorials upang palaguin ang kanilang presensya, dagdagan ang kita, at bumuo ng malalakas na network ng agency.',
+    EN: 'Join hundreds of hosts and agents who have used mamehala tutorials to grow their presence, increase earnings, and build strong agency networks.',
+    FR: 'Rejoignez des centaines d\'hôtes et d\'agents qui ont utilisé les tutoriels mamehala pour développer leur présence, augmenter leurs revenus et construire de solides réseaux d\'agence.',
+    AR: 'انضم إلى المئات من المضيفين والوكلاء الذين استخدموا دروس mamehala لتنمية حضورهم وزيادة أرباحهم وبناء شبكات وكالة قوية.',
+    AM: 'መልካም ተገኝተው mamehala ትምህርቶችን በመጠቀም መገኘታቸውን ለማሳደግ፣ ገቢያቸውን ለመጨመር እና ጠንካራ የኤጀንሲ አውታረ መረቦችን ለመገንባት ከቻሉ በመቶዎች የሚቆጠሩ አስተናጋጆች እና ወኪሎች ጋር ይቀላቀሉ።',
+    OM: 'Dhibbaan lakkaa\'aman abbaa manaatiifi bakka bu\'oota qophii mamehala fayyadamanii argamuu isaanii guddisuu, galma isaanii dabaluufi saaphana ajensaa jabaa ijaarratan waliin taa\'aa.',
+    TL: 'Sumali sa daan-daang host at agent na gumamit ng mamehala tutorials upang palaguin ang kanilang presensya, dagdagan ang kita, at bumuo ng malalakas na network ng agency.',
   },
 
   // ★ Contact
@@ -271,7 +271,7 @@ const T = {
   'contact.whatsappLabel': { EN: 'WhatsApp', FR: 'WhatsApp', AR: 'واتساب', AM: 'WhatsApp', OM: 'WhatsApp', TL: 'WhatsApp' },
   'contact.whatsappDesc': { EN: 'Fastest response — message us on WhatsApp.', FR: 'Réponse la plus rapide — envoyez-nous un message sur WhatsApp.', AR: 'أسرع رد — أرسل لنا رسالة على واتساب.', AM: 'ፈጣን ምላሽ — በWhatsApp መልእክት ይላኩልን።', OM: 'Deebii saffisaa — WhatsApp irratti nuuf ergaa.', TL: 'Pinakamabilis na tugon — mag-message sa amin sa WhatsApp.' },
   'contact.agencyLabel': { EN: 'Agency ID', FR: 'ID d\'agence', AR: 'معرف الوكالة', AM: 'የኤጀንሲ መለያ', OM: 'ID Ajensaa', TL: 'Agency ID' },
-  'contact.agencyDesc': { EN: 'Use this ID to find and join Mame Family on the platform.', FR: 'Utilisez cet ID pour trouver et rejoindre Famille Mame sur la plateforme.', AR: 'استخدم هذا المعرف للعثور على عائلة مام والانضمام إليها على المنصة.', AM: 'በመድረክ ላይ ማሜ ቤተሰብን ለማግኘት እና ለመቀላቀል ይህን መለያ ይጠቀሙ።', OM: 'Platforma irratti Maatii Mame argachuufi itti hirmaachuuf ID kana fayyadamaa.', TL: 'Gamitin ang ID na ito upang mahanap at sumali sa Pamilya Mame sa platform.' },
+  'contact.agencyDesc': { EN: 'Use this ID to find and join mamehala on the platform.', FR: 'Utilisez cet ID pour trouver et rejoindre mamehala sur la plateforme.', AR: 'استخدم هذا المعرف للعثور على mamehala والانضمام إليها على المنصة.', AM: 'በመድረክ ላይ mamehala ን ለማግኘት እና ለመቀላቀል ይህን መለያ ይጠቀሙ።', OM: 'Platforma irratti mamehala argachuufi itti hirmaachuuf ID kana fayyadamaa.', TL: 'Gamitin ang ID na ito upang mahanap at sumali sa mamehala sa platform.' },
   'contact.note': {
     EN: 'For urgent support, WhatsApp is the fastest way to reach us. For tutorial requests or feedback, email works best.',
     FR: 'Pour une assistance urgente, WhatsApp est le moyen le plus rapide de nous joindre. Pour les demandes de tutoriels ou les commentaires, l\'email est le meilleur moyen.',
