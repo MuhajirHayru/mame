@@ -270,6 +270,8 @@ const T = {
   'contact.phoneDesc':   { EN: 'Available Monday to Friday, 9am to 6pm.', FR: 'Disponible du lundi au vendredi, de 9h à 18h.', AR: 'متاح من الاثنين إلى الجمعة، من 9 صباحًا إلى 6 مساءً.', AM: 'ከሰኞ እስከ አርብ ከጧቱ 9 እስከ ምሽቱ 6 ይገኛል።', OM: 'Niitii hanga Jimaataa, sa\'aa 9 ffii hanga 6 fiidhamatti jira.', TL: 'Available Lunes hanggang Biyernes, 9am hanggang 6pm.' },
   'contact.whatsappLabel': { EN: 'WhatsApp', FR: 'WhatsApp', AR: 'واتساب', AM: 'WhatsApp', OM: 'WhatsApp', TL: 'WhatsApp' },
   'contact.whatsappDesc': { EN: 'Fastest response — message us on WhatsApp.', FR: 'Réponse la plus rapide — envoyez-nous un message sur WhatsApp.', AR: 'أسرع رد — أرسل لنا رسالة على واتساب.', AM: 'ፈጣን ምላሽ — በWhatsApp መልእክት ይላኩልን።', OM: 'Deebii saffisaa — WhatsApp irratti nuuf ergaa.', TL: 'Pinakamabilis na tugon — mag-message sa amin sa WhatsApp.' },
+  'contact.telegramLabel': { EN: 'Telegram', FR: 'Telegram', AR: 'تيليجرام', AM: 'ቴሌግራም', OM: 'Telegram', TL: 'Telegram' },
+  'contact.telegramDesc': { EN: 'Chat with us on Telegram for quick support.', FR: 'Discutez avec nous sur Telegram pour une assistance rapide.', AR: 'تحدث معنا على تيليجرام للحصول على دعم سريع.', AM: 'ለፈጣን ድጋፍ በቴሌግራም ላይ ያነጋግሩን።', OM: 'Deeggarsa saffisaatiif Telegram irratti nu waliin hasa\'i.', TL: 'Makipag-chat sa amin sa Telegram para sa mabilis na suporta.' },
   'contact.agencyLabel': { EN: 'Agency ID', FR: 'ID d\'agence', AR: 'معرف الوكالة', AM: 'የኤጀንሲ መለያ', OM: 'ID Ajensaa', TL: 'Agency ID' },
   'contact.agencyDesc': { EN: 'Use this ID to find and join mamehala on the platform.', FR: 'Utilisez cet ID pour trouver et rejoindre mamehala sur la plateforme.', AR: 'استخدم هذا المعرف للعثور على mamehala والانضمام إليها على المنصة.', AM: 'በመድረክ ላይ mamehala ን ለማግኘት እና ለመቀላቀል ይህን መለያ ይጠቀሙ።', OM: 'Platforma irratti mamehala argachuufi itti hirmaachuuf ID kana fayyadamaa.', TL: 'Gamitin ang ID na ito upang mahanap at sumali sa mamehala sa platform.' },
   'contact.note': {
@@ -288,6 +290,7 @@ const T = {
   'footer.emailUs':   { EN: 'Email Us',  FR: 'Envoyez-nous un email', AR: 'أرسل لنا بريدًا',   AM: 'ኢሜይል ይላኩልን', OM: 'Imeeyli nuuf ergaa', TL: 'I-email Kami' },
   'footer.whatsapp':  { EN: 'WhatsApp',  FR: 'WhatsApp',    AR: 'واتساب',        AM: 'WhatsApp',     OM: 'WhatsApp',    TL: 'WhatsApp' },
   'footer.callUs':    { EN: 'Call Us',   FR: 'Appelez-nous', AR: 'اتصل بنا',     AM: 'ይደውሉልን',     OM: 'Nu bilbilaa',  TL: 'Tawagan Kami' },
+  'footer.telegram':  { EN: 'Telegram',  FR: 'Telegram',     AR: 'تيليجرام',     AM: 'ቴሌግራም',      OM: 'Telegram',     TL: 'Telegram' },
   'footer.copyright': {
     EN: 'All rights reserved',
     FR: 'Tous droits réservés',

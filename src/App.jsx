@@ -6,49 +6,31 @@ const BASE = import.meta.env.BASE_URL || '/'
 
 const VIDEOS = {
   faceAuth: [
-    { id: 'rSx69gz77Pg', titleEn: 'Face Authentication – Full Guide' },
-    { id: '2Vv-BfVoq4g', titleEn: 'Face ID Setup Step by Step' },
-    { id: 'tAGnKpE4NCI', titleEn: 'Verify Your Identity on Hala' },
+    { id: 'Uyt2egIE1yk', titleEn: 'Face Authentication – Full Guide' },
   ],
   getStarted: [
-    { id: 'V3GaxZKU0zY', titleEn: 'How to Get Started on the Platform' },
-    { id: 'kXYiU_JCYtU', titleEn: 'First Steps After Registration' },
-    { id: 'CevxZvSJLk8', titleEn: 'Complete Beginner Walkthrough' },
+    { id: 'Uyt2egIE1yk', titleEn: 'Getting Started on the Platform' },
   ],
   tasks: [
-    { id: 'IUjWvHXvD3g', titleEn: 'How to Complete Daily Tasks' },
-    { id: 'gqF50QQq1bU', titleEn: 'Task Status and Staying Active' },
-    { id: 'tVj0ZTS4WF4', titleEn: 'Task Guide for New Agents' },
+    { id: 'rSx69gz77Pg', titleEn: 'How to Complete Daily Tasks' },
   ],
   withdraw: [
-    { id: '3JZ_D3ELwOQ', titleEn: 'How to Withdraw Your Earnings' },
-    { id: '04854XqcfCY', titleEn: 'Withdrawal Methods Explained' },
-    { id: 'QtXby3twMmI', titleEn: 'Coins Withdrawal Step by Step' },
+    { id: 'uP0kaqwBQu0', titleEn: 'How to Withdraw Your Earnings' },
   ],
   exchange: [
-    { id: '60ItHLz5WEA', titleEn: 'How to Exchange and Get Points' },
-    { id: 'rSx69gz77Pg', titleEn: 'Coin Exchange Full Tutorial' },
-    { id: '2Vv-BfVoq4g', titleEn: 'Points System Explained' },
+    { id: '8hc6GPo9qow', titleEn: 'How to Exchange and Get Points' },
   ],
   platform: [
-    { id: 'tAGnKpE4NCI', titleEn: 'Platform General Overview' },
-    { id: 'V3GaxZKU0zY', titleEn: 'Rules and Guidelines for Hosts' },
-    { id: 'kXYiU_JCYtU', titleEn: 'Platform Features Tour' },
+    { id: 'yVNBF5y6nmo', titleEn: 'Platform Information & Rules' },
   ],
   agency: [
-    { id: 'CevxZvSJLk8', titleEn: 'How to Create an Agency' },
-    { id: 'IUjWvHXvD3g', titleEn: 'Agency Setup and Management' },
-    { id: 'gqF50QQq1bU', titleEn: 'Agency Leader Responsibilities' },
+    { id: 'e3iI5sqwQro', titleEn: 'How to Create an Agency' },
   ],
   inviteHosts: [
-    { id: 'tVj0ZTS4WF4', titleEn: 'How to Invite New Hosts' },
-    { id: '3JZ_D3ELwOQ', titleEn: 'Recruit Hosts from the Platform' },
-    { id: '04854XqcfCY', titleEn: 'Growing Your Host Network' },
+    { id: 'LoHAh5SUKRI', titleEn: 'How to Invite New Hosts' },
   ],
   applyAgency: [
-    { id: 'QtXby3twMmI', titleEn: 'How to Apply to an Agency' },
-    { id: '60ItHLz5WEA', titleEn: 'Agency Application Process' },
-    { id: 'rSx69gz77Pg', titleEn: 'What Happens After You Apply' },
+    { id: 'e3iI5sqwQro', titleEn: 'How to Apply to an Agency' },
   ],
 }
 
@@ -431,13 +413,17 @@ function ContactPage({ lang }) {
           <span className="contact-icon" aria-hidden="true">✉️</span>
           <div><strong>{t('contact.emailLabel', lang)}</strong><span>hello@halamobile.com</span><p>{t('contact.emailDesc', lang)}</p></div>
         </a>
-        <a href="tel:+1234567890" className="contact-card">
+        <a href="tel:0923566471" className="contact-card">
           <span className="contact-icon" aria-hidden="true">📞</span>
-          <div><strong>{t('contact.phoneLabel', lang)}</strong><span>+1 234 567 890</span><p>{t('contact.phoneDesc', lang)}</p></div>
+          <div><strong>{t('contact.phoneLabel', lang)}</strong><span>0923566471</span><p>{t('contact.phoneDesc', lang)}</p></div>
         </a>
-        <a href="https://wa.me/1234567890" target="_blank" rel="noreferrer" className="contact-card">
+        <a href="https://wa.me/0923566471" target="_blank" rel="noreferrer" className="contact-card">
           <span className="contact-icon" aria-hidden="true">💬</span>
-          <div><strong>{t('contact.whatsappLabel', lang)}</strong><span>+1 234 567 890</span><p>{t('contact.whatsappDesc', lang)}</p></div>
+          <div><strong>{t('contact.whatsappLabel', lang)}</strong><span>0923566471</span><p>{t('contact.whatsappDesc', lang)}</p></div>
+        </a>
+        <a href="https://t.me/mame3398" target="_blank" rel="noreferrer" className="contact-card">
+          <span className="contact-icon" aria-hidden="true">✈️</span>
+          <div><strong>{t('contact.telegramLabel', lang)}</strong><span>@mame3398</span><p>{t('contact.telegramDesc', lang)}</p></div>
         </a>
         <div className="contact-card no-hover">
           <span className="contact-icon" aria-hidden="true">🪪</span>
@@ -552,9 +538,11 @@ export default function App() {
             </div>
             <div className="footer-col">
               <div className="footer-col-hd">{t('footer.contact', lang)}</div>
-              <a className="footer-link" href="mailto:hello@halamobile.com">✉️ {t('footer.emailUs', lang)}</a>
-              <a className="footer-link" href="https://wa.me/1234567890" target="_blank" rel="noreferrer">💬 {t('footer.whatsapp', lang)}</a>
-              <a className="footer-link" href="tel:+1234567890">📞 {t('footer.callUs', lang)}</a>
+              <a className="footer-link" href="mailto:hello@halamobile.com">✉️ hello@halamobile.com</a>
+              <a className="footer-link" href="tel:0923566471">� 0923566471</a>
+              <a className="footer-link" href="https://wa.me/0923566471" target="_blank" rel="noreferrer">💬 WhatsApp</a>
+              <a className="footer-link" href="https://t.me/mame3398" target="_blank" rel="noreferrer">✈️ @mame3398</a>
+              <span className="footer-link">🪪 ID: 1099400</span>
             </div>
           </div>
         </div>
